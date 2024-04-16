@@ -7,12 +7,12 @@ const {
 
 const historySchema = new Schema({
   patientId: {
-    type: ObjectId,
+    type: String,
     required: true,
-    ref: "User",
+    ref: "Patient",
   },
   licenseNumber: {
-    type: ObjectId,
+    type: String,
     required: true,
     ref: "Doctor",
   },
@@ -20,20 +20,11 @@ const historySchema = new Schema({
     type: String,
   },
   prognosis: {
-    // 진단 내용
     type: String,
   },
   diagnosisDate: {
-    // 진단 일
     type: Date,
-  },
-  onsetDate: {
-    // 발병일
-    type: Date,
-  },
-  hospitalizationDate: {
-    // 입원 일
-    type: Date,
+    default: Date.now,
   },
 });
 

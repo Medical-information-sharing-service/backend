@@ -3,21 +3,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const config = require("./config/key");
-
-// const http = require("http");
-// const path = require("path");
-// const bodyParser = require("body-parser");
 // const errorControllers = require("./controllers/error");
-
-// const swaggerJsdoc = require("swagger-jsdoc");
-// const swaggerUi = require("swagger-ui-express");
 
 // const cookieParser = require("cookie-parser");
 // const cors = require("cors");
 
 // const adminRoutes = require("./routes/admin");
 // const boardRoutes = require("./routes/board");
-// const userRoutes = require("./routes/user");
+const userRoutes = require("./routes/user");
 
 //admin bro
 // const { adminBro, router } = require("./admin-config"); // 상대 경로에 주의하세요.
@@ -41,47 +34,28 @@ mongoose
   .catch((err) => console.log(err)); //에러를 출력
 
 // // CORS 문제 해결
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     credentials: true,
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+//post를 사용할 수 있게
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // app.use(cookieParser());
 
 // app.use(adminBro.options.rootPath, router);
 // app.listen(1500, function () {
 //   console.log("Listening to Port 1500");
 // });
-// //post를 사용할 수 있게
-// app.use(express.urlencoded({ extended: true }));
-// app.use(cookieParser());
-// app.use(express.json());
-// //swagger
-// const options = {
-//   definition: {
-//     openapi: "3.0.0",
-//     info: {
-//       title: "성균문고 API",
-//       version: "0.1.0",
-//     },
-//     servers: [
-//       {
-//         url: "http://localhost:8000/",
-//       },
-//     ],
-//   },
-//   apis: ["./routes/*.js", "./models/*.js"],
-// };
 
-// const specs = swaggerJsdoc(options);
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-
-// //router 목록
+//router 목록
 // app.use("/admin", adminRoutes); // 라우터 객체 사용 -> /admin으로 시작하는 경우 모두 adminRoutes로
 // app.use("/board", boardRoutes);
-// app.use("/user", userRoutes);
+app.use("/user", userRoutes);
 
 // app.get("/", (req, res) => res.send("TEAM8"));
 // app.get("/", function (req, res) {

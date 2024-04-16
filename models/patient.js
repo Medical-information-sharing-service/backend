@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const patientSchema = new Schema({
   patientId: {
     type: String,
     unique: true,
@@ -12,17 +12,12 @@ const userSchema = new Schema({
     type: String,
   },
   gender: {
+    type: String,
     enum: ["male", "female"],
   },
   address: {
     type: String,
   },
-  birth: {
-    type: Date,
-  },
-  password: {
-    type: String,
-  },
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Patient", patientSchema);
