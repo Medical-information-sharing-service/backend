@@ -1,3 +1,9 @@
+const port = 8000; //포트번호 설정
+const express = require("express");
+const mongoose = require("mongoose");
+const app = express();
+const config = require("./config/key");
+
 // const http = require("http");
 // const path = require("path");
 // const bodyParser = require("body-parser");
@@ -6,15 +12,8 @@
 // const swaggerJsdoc = require("swagger-jsdoc");
 // const swaggerUi = require("swagger-ui-express");
 
-const port = 8000; //포트번호 설정
-const express = require("express");
-
-// const mongoose = require("mongoose");
 // const cookieParser = require("cookie-parser");
-
 // const cors = require("cors");
-const app = express();
-// const config = require("./config/key");
 
 // const adminRoutes = require("./routes/admin");
 // const boardRoutes = require("./routes/board");
@@ -32,14 +31,14 @@ const app = express();
 // );
 
 // //DB 설정
-// mongoose
-//   .connect(config.mongoURI, {
-//     // 몽고디비 연결 주소를 넣어주도록 한다.
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true, //옵션 -> 에러를 막아준다.
-//   })
-//   .then(() => console.log("MongoDB Connected...")) // 연결될 경우에 던져주기
-//   .catch((err) => console.log(err)); //에러를 출력
+mongoose
+  .connect(config.mongoURI, {
+    // 몽고디비 연결 주소를 넣어주도록 한다.
+    useNewUrlParser: true,
+    useUnifiedTopology: true, //옵션 -> 에러를 막아준다.
+  })
+  .then(() => console.log("MongoDB Connected...")) // 연결될 경우에 던져주기
+  .catch((err) => console.log(err)); //에러를 출력
 
 // // CORS 문제 해결
 // app.use(
