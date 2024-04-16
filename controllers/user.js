@@ -97,15 +97,16 @@ exports.postLogin = async (req, res, next) => {
 };
 
 // 로그 아웃
-exports.postLogout = async (req, res, next) => {
+exports.getLogout = async (req, res, next) => {
   try {
     // cookie 지우기
-    res.clearCookie("token", req.cookies.token);
+    // res.clearCookie("token", req.cookies.token);
     res.json({
       isSuccess: true,
       message: "로그아웃에 성공하였습니다.",
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       isSuccess: false,
       message: "서버에서 오류가 발생하였습니다. 나중에 다시 시도하세요.",

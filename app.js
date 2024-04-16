@@ -3,10 +3,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const config = require("./config/key");
+const cors = require("cors");
 // const errorControllers = require("./controllers/error");
 
 // const cookieParser = require("cookie-parser");
-// const cors = require("cors");
 
 // const adminRoutes = require("./routes/admin");
 // const boardRoutes = require("./routes/board");
@@ -53,14 +53,9 @@ app.use(express.json());
 // });
 
 //router 목록
-// app.use("/admin", adminRoutes); // 라우터 객체 사용 -> /admin으로 시작하는 경우 모두 adminRoutes로
+// app.use("/admin", adminRoutes);
 // app.use("/board", boardRoutes);
 app.use("/user", userRoutes);
-
-// app.get("/", (req, res) => res.send("TEAM8"));
-// app.get("/", function (req, res) {
-//   res.send("hello NodeJs");
-// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
