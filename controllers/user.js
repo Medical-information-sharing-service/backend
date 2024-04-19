@@ -42,6 +42,8 @@ exports.postLogin = async (req, res, next) => {
   try {
     const { licenseNumber, password } = req.body;
 
+    console.log(licenseNumber, password);
+
     const doctor = await Doctor.findOne({ licenseNumber });
 
     // 존재하지 않는 아이디
@@ -110,44 +112,6 @@ exports.getLogout = async (req, res, next) => {
     res.status(500).json({
       isSuccess: false,
       message: "서버에서 오류가 발생하였습니다. 나중에 다시 시도하세요.",
-    });
-  }
-};
-
-// 환자 정보 등록
-exports.postPatient = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader.split(" ")[1];
-
-  try {
-    req.decoded = jwt.verify(token, config.JWT);
-    const { licenseNumber } = req.decoded;
-    const doctor = await Doctor.findOne({ licenseNumber });
-    if (!doctor) {
-      res.status(404).json({
-        isSuccess: false,
-        message: "유저 정보가 없습니다.",
-        token,
-      });
-
-      return;
-    }
-
-    const { patientId, name, gender, address } = req.body;
-
-    await Patient.create({ patientId, name, gender, address });
-
-    res.json({
-      isSuccess: true,
-      message: "환자 정보 생성에 성공하였습니다.",
-      token,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      isSuccess: false,
-      message: "서버 오류 발생",
-      token,
     });
   }
 };
@@ -237,12 +201,24 @@ exports.postHistory = async (req, res, next) => {
       return;
     }
 
-    await History.create({
-      patientId,
-      licenseNumber,
-      diagnosisCode,
-      prognosis,
-    });
+    const isAuthority = patient.doctorList.some((ele) => ele === licenseNumber);
+
+    if (isAuthority) {
+      await History.create({
+        patientId,
+        licenseNumber,
+        diagnosisCode,
+        prognosis,
+      });
+    } else {
+      res.json({
+        isSuccess: false,
+        message: "환자 기록 생성 권한이 없습니다.",
+        token,
+      });
+
+      return;
+    }
 
     res.json({
       isSuccess: true,
@@ -290,12 +266,64 @@ exports.getHistory = async (req, res, next) => {
       return;
     }
 
-    const history = await History.find({ patientId });
+    const isAuthority = patient.doctorList.some((ele) => ele === licenseNumber);
+
+    if (isAuthority) {
+      const history = await History.find({ patientId });
+
+      res.json({
+        history,
+        isSuccess: true,
+        message: "환자 기록 정보 가져오기 성공",
+        token,
+      });
+
+      return;
+    } else {
+      res.json({
+        isSuccess: false,
+        message: "환자 기록 열람 권한이 없습니다.",
+        token,
+      });
+
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      isSuccess: false,
+      message: "서버 오류 발생",
+      token,
+    });
+  }
+};
+
+// 환자 정보 등록
+/* exports.postPatient = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader.split(" ")[1];
+
+  try {
+    req.decoded = jwt.verify(token, config.JWT);
+    const { licenseNumber } = req.decoded;
+    const doctor = await Doctor.findOne({ licenseNumber });
+    if (!doctor) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "유저 정보가 없습니다.",
+        token,
+      });
+
+      return;
+    }
+
+    const { patientId, name, gender, address } = req.body;
+
+    await Patient.create({ patientId, name, gender, address });
 
     res.json({
-      history,
       isSuccess: true,
-      message: "환자 기록 정보 발송",
+      message: "환자 정보 생성에 성공하였습니다.",
       token,
     });
   } catch (err) {
@@ -306,4 +334,4 @@ exports.getHistory = async (req, res, next) => {
       token,
     });
   }
-};
+}; */

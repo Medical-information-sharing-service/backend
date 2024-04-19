@@ -38,19 +38,6 @@ router.get("/logout", auth, usersController.getLogout);
     }
  */
 
-// 환자 정보 등록
-router.post("/patient", auth, usersController.postPatient);
-/*
-  method: post
-  path: user/patient
-  req.body: {patientId, name, gender, address}
-  return: {
-      isSuccess: true,
-      message: "환자 정보 생성에 성공하였습니다.",
-      token,
-    }
- */
-
 // 환자 정보 가져오기
 router.post("/patient/info", auth, usersController.getPatient);
 /*
@@ -93,9 +80,20 @@ router.post("/history/info", auth, usersController.getHistory);
     }
  */
 
+// 환자 정보 등록
+// router.post("/patient", auth, usersController.postPatient);
+/*
+  method: post
+  path: user/patient
+  req.body: {patientId, name, gender, address}
+  return: {
+      isSuccess: true,
+      message: "환자 정보 생성에 성공하였습니다.",
+      token,
+    }
+ */
 /* 
 // 유저 확인
-// router.get("/usersall", usersController.findAllUser);
 router.patch("/profile", auth, usersController.patchProfile);
 */
 module.exports = router;

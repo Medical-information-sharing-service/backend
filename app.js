@@ -11,6 +11,7 @@ const cors = require("cors");
 // const adminRoutes = require("./routes/admin");
 // const boardRoutes = require("./routes/board");
 const userRoutes = require("./routes/user");
+const patientRoutes = require("./routes/patient");
 
 //admin bro
 // const { adminBro, router } = require("./admin-config"); // 상대 경로에 주의하세요.
@@ -56,6 +57,7 @@ app.use(express.json());
 // app.use("/admin", adminRoutes);
 // app.use("/board", boardRoutes);
 app.use("/user", userRoutes);
+app.use("/patient", patientRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

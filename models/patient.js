@@ -8,6 +8,9 @@ const patientSchema = new Schema({
     unique: true,
     required: true,
   },
+  password: {
+    type: String,
+  },
   name: {
     type: String,
   },
@@ -17,6 +20,16 @@ const patientSchema = new Schema({
   },
   address: {
     type: String,
+  },
+  residentNumber: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  doctorList: {
+    // 담당 의사 리스트
+    type: [String],
+    required: true,
   },
 });
 
