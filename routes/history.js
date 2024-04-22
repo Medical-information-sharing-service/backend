@@ -8,7 +8,7 @@ router.post("/creation", auth, historiesController.postHistory);
 /*
   method: post
   path: /history
-  req.body: {patientId, diagnosisCode, prognosis}
+  req.body: {patientId, diagnosisCode, prognosis, title}
   return: {
       isSuccess: true,
       message: "환자 기록 생성에 성공하였습니다.",

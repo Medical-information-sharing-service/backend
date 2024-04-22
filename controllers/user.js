@@ -7,8 +7,13 @@ const jwt = require("jsonwebtoken");
 // 의사 회원가입 요청
 exports.postJoin = async (req, res, next) => {
   try {
-    const { doctorName, password, licenseNumber, medicalInstitution } =
-      req.body;
+    const {
+      doctorName,
+      password,
+      licenseNumber,
+      medicalInstitution,
+      diagnosisCode,
+    } = req.body;
 
     // 이미 가입된 회원인지 확인
     const doctor = await Doctor.findOne({ licenseNumber });
@@ -25,6 +30,7 @@ exports.postJoin = async (req, res, next) => {
       licenseNumber,
       medicalInstitution,
       password,
+      diagnosisCode,
     });
 
     res.status(200).json({

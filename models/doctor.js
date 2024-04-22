@@ -19,7 +19,6 @@ const doctorSchema = new Schema({
     type: String,
   },
   diagnosisCode: {
-    required: true,
     type: String,
   },
 });
