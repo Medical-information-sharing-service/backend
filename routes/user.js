@@ -52,34 +52,6 @@ router.post("/patient/info", auth, usersController.getPatient);
     }
  */
 
-// 환자 기록 생성
-router.post("/history", auth, usersController.postHistory);
-/*
-  method: post
-  path: user/history
-  req.body: {patientId, diagnosisCode, prognosis}
-  return: {
-      isSuccess: true,
-      message: "환자 기록 생성에 성공하였습니다.",
-      token,
-    }
-    
- */
-
-// 환자 기록 가져오기
-router.post("/history/info", auth, usersController.getHistory);
-/*
-  method: post
-  path: user/history/info
-  req.body: {patientId}
-  return: {
-      history,
-      isSuccess: true,
-      message: "환자 기록 정보 발송",
-      token,
-    }
- */
-
 // 환자 정보 등록
 // router.post("/patient", auth, usersController.postPatient);
 /*
