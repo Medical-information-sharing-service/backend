@@ -58,7 +58,7 @@ exports.postLogin = async (req, res, next) => {
     if (!patient) {
       res.status(401).json({
         isSuccess: false,
-        message: "가입되지 않은 사용자입니다.",
+        message: "가입되지 않은 환자입니다.",
       });
       return;
     }

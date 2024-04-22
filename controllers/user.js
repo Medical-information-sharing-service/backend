@@ -20,7 +20,7 @@ exports.postJoin = async (req, res, next) => {
     if (doctor) {
       res.status(404).json({
         isSuccess: false,
-        message: "이미 등록된 유저입니다.",
+        message: "이미 등록된 의사입니다.",
       });
       return;
     }
@@ -134,7 +134,7 @@ exports.getPatient = async (req, res, next) => {
     if (!doctor) {
       res.status(404).json({
         isSuccess: false,
-        message: "유저 정보가 없습니다.",
+        message: "의사 정보가 없습니다.",
         token,
       });
 
@@ -185,7 +185,7 @@ exports.getPatient = async (req, res, next) => {
     if (!doctor) {
       res.status(404).json({
         isSuccess: false,
-        message: "유저 정보가 없습니다.",
+        message: "의사 정보가 없습니다.",
         token,
       });
 
