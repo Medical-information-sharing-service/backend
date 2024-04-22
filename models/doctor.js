@@ -8,6 +8,7 @@ const doctorSchema = new Schema({
   },
   password: {
     type: String,
+    required: true,
   },
   licenseNumber: {
     type: String,
@@ -15,6 +16,10 @@ const doctorSchema = new Schema({
     required: true,
   },
   medicalInstitution: {
+    type: String,
+  },
+  diagnosisCode: {
+    required: true,
     type: String,
   },
 });
