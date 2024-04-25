@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/creation", auth, historiesController.postHistory);
 
 // 의사가 환자의 모든 기록 가져오기
-router.post("/doctor/records", auth, historiesController.getAllHistory);
+router.get("/doctor/records", auth, historiesController.getAllHistory);
 
 //////환자///////
 

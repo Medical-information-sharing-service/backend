@@ -173,6 +173,72 @@ exports.getPatient = async (req, res, next) => {
   }
 };
 
+// 환자에게 기록 열람 동의 요청
+exports.postAgree = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader.split(" ")[1];
+
+  try {
+    req.decoded = jwt.verify(token, config.JWT);
+    const { licenseNumber } = req.decoded;
+    const doctor = await Doctor.findOne({ licenseNumber });
+    if (!doctor) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "의사 정보가 없습니다.",
+        token,
+      });
+
+      return;
+    }
+
+    const { patientId } = req.body;
+    const patient = await Patient.findOne({ patientId });
+
+    if (!patient) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "환자 정보가 없습니다.",
+        token,
+      });
+
+      return;
+    }
+
+    const isAlready = doctor.patientList.some((ele) => ele === patientId);
+
+    if (isAlready) {
+      res.json({
+        isSuccess: false,
+        message: "이미 등록된 환자입니다.",
+        token,
+      });
+    } else {
+      // 중복 처리
+      let { agreeList } = patient;
+      agreeList = agreeList.filter((e) => e !== licenseNumber);
+      agreeList.push(licenseNumber);
+
+      await patient.updateOne({ agreeList });
+
+      res.json({
+        isSuccess: true,
+        message: "동의 요청에 성공하였습니다.",
+        token,
+      });
+
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      isSuccess: false,
+      message: "서버 오류 발생",
+      token,
+    });
+  }
+};
+
 // 환자 정보 등록
 /* exports.postPatient = async (req, res, next) => {
   const authHeader = req.headers.authorization;

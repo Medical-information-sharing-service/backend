@@ -21,6 +21,9 @@ const doctorSchema = new Schema({
   diagnosisCode: {
     type: String,
   },
+  patientList: {
+    type: [String],
+  },
 });
 
 module.exports = mongoose.model("Doctor", doctorSchema);

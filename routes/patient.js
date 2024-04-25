@@ -34,15 +34,8 @@ router.post("/login", patientsController.postLogin);
  */
 
 // 정보 제공 여부 응답
-router.post("/agree", auth, patientsController.getAgree);
-/*
-  method: post
-  path: patient/agree
-  req.body: {licenseNumber, answer}
-  return: {
-        message: "로그인에 성공하였습니다.",
-        isSuccess: true,
-        token,
-      }
- */
+router.post("/agree", auth, patientsController.postAgree);
+
+// 동의 요청 리스트
+router.get("/agree", auth, patientsController.getAgreeList);
 module.exports = router;

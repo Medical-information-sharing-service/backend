@@ -27,6 +27,17 @@ exports.postJoin = async (req, res, next) => {
       return;
     }
 
+    const doctor = await Doctor.findOne({ licenseNumber: doctorList });
+    if (!doctor) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "해당 라이센스의 의사가 없습니다.",
+      });
+      return;
+    }
+
+    await doctor.updateOne({ patientList: patientId });
+
     await Patient.create({
       patientId,
       name,
@@ -123,8 +134,47 @@ exports.getLogout = async (req, res, next) => {
   }
 };
 
+// 동의 요청 리스트
+exports.getAgreeList = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader.split(" ")[1];
+
+  try {
+    req.decoded = jwt.verify(token, config.JWT);
+    const { patientId } = req.decoded;
+
+    // 환자 유무 확인
+    const patient = await Patient.findOne({ patientId });
+    if (!patient) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "환자 정보가 없습니다.",
+        token,
+      });
+
+      return;
+    }
+
+    const { agreeList } = patient;
+
+    res.json({
+      agreeList,
+      isSuccess: true,
+      message: "환자 기록 동의 요청 리스트 보내기 완료",
+      token,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      isSuccess: false,
+      message: "서버 오류 발생",
+      token,
+    });
+  }
+};
+
 // 동의 요청 응답
-exports.getAgree = async (req, res, next) => {
+exports.postAgree = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader.split(" ")[1];
 
@@ -146,13 +196,33 @@ exports.getAgree = async (req, res, next) => {
 
     const { licenseNumber, answer } = req.body;
 
-    if (answer) {
+    if (answer === "Accept") {
       patient.doctorList.push(licenseNumber);
+      patient.agreeList = patient.agreeList.filter((e) => e !== licenseNumber);
+
+      await patient.save();
+
+      const doctor = await Doctor.findOne({ licenseNumber });
+
+      const isAlready = doctor.patientList.some((ele) => ele === patientId);
+
+      if (!isAlready) {
+        doctor.patientList.push(patientId);
+
+        await doctor.save();
+      } else {
+        res.json({
+          isSuccess: false,
+          message: "이미 등록된 환자입니다.",
+          token,
+        });
+
+        return;
+      }
 
       res.json({
-        history,
         isSuccess: true,
-        message: "환자 기록 기록 공유 성공",
+        message: "환자 기록 공유 동의 성공",
         token,
       });
 

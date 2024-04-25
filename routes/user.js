@@ -40,6 +40,10 @@ router.get("/logout", auth, usersController.getLogout);
 
 // 환자 정보 가져오기
 router.post("/patient/info", auth, usersController.getPatient);
+
+// 환자에게 기록 열람 동의 요청
+router.post("/agree", auth, usersController.postAgree);
+
 /*
   method: post
   path: user/patient/info

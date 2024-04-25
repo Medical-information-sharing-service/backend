@@ -31,6 +31,10 @@ const patientSchema = new Schema({
     type: [String],
     required: true,
   },
+  agreeList: {
+    // 요청 리스트
+    type: [String],
+  },
 });
 
 module.exports = mongoose.model("Patient", patientSchema);
