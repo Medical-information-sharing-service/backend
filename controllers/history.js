@@ -238,3 +238,54 @@ exports.getHistoryList = async (req, res, next) => {
     });
   }
 };
+
+// 의사가 환자의 기록의 개별 ID를 통해 가져오기
+exports.getonePatientHistory = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader.split(" ")[1];
+
+  try {
+    req.decoded = jwt.verify(token, config.JWT);
+    const { licenseNumber } = req.decoded;
+    const doctor = await Patient.findOne({ licenseNumber });
+    if (!doctor) {
+      res.status(404).json({
+        isSuccess: false,
+        message: "의사 정보가 없습니다.",
+        token,
+      });
+
+      return;
+    }
+
+    const { historyId } = req.body;
+
+    const history = await History.findOne({ _id: historyId });
+
+    if (history) {
+      res.json({
+        history,
+        isSuccess: true,
+        message: "환자 기록 정보 가져오기 성공",
+        token,
+      });
+
+      return;
+    } else {
+      res.json({
+        isSuccess: false,
+        message: "환자 기록 정보 가져오기 실패",
+        token,
+      });
+
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      isSuccess: false,
+      message: "서버 오류 발생",
+      token,
+    });
+  }
+};
