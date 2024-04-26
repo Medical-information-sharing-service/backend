@@ -87,7 +87,7 @@ exports.postHistory = async (req, res, next) => {
       return;
     }
 
-    const { patientId, diagnosisCode, prognosis, title } = req.body;
+    const { patientId, diagnosisCode, prognosis, title, diagnosis } = req.body;
 
     // 환자 유무 확인
     const patient = await Patient.findOne({ patientId });
@@ -110,6 +110,7 @@ exports.postHistory = async (req, res, next) => {
         diagnosisCode,
         prognosis,
         title,
+        diagnosis,
       });
     } else {
       res.json({
