@@ -247,7 +247,7 @@ exports.getonePatientHistory = async (req, res, next) => {
   try {
     req.decoded = jwt.verify(token, config.JWT);
     const { licenseNumber } = req.decoded;
-    const doctor = await Patient.findOne({ licenseNumber });
+    const doctor = await Doctor.findOne({ licenseNumber });
     if (!doctor) {
       res.status(404).json({
         isSuccess: false,
