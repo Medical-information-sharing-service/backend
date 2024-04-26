@@ -240,7 +240,7 @@ exports.postAgree = async (req, res, next) => {
       await patient.save();
 
       res.json({
-        isSuccess: false,
+        isSuccess: true,
         message: "환자가 기록 공유를 동의하지 않았습니다.",
         token,
       });
