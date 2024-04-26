@@ -197,6 +197,8 @@ exports.postAgree = async (req, res, next) => {
     const { licenseNumber, answer } = req.body;
 
     if (answer === "Accept") {
+      const doctor = await Doctor.findOne({ licenseNumber });
+
       // 의사에 환자 담기
       const isAlready = doctor.patientList.some((ele) => ele === patientId);
 
@@ -222,8 +224,6 @@ exports.postAgree = async (req, res, next) => {
       patient.agreeList = patient.agreeList.filter((e) => e !== licenseNumber);
 
       await patient.save();
-
-      const doctor = await Doctor.findOne({ licenseNumber });
 
       res.json({
         isSuccess: true,
