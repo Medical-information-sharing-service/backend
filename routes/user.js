@@ -38,7 +38,7 @@ router.get("/logout", auth, usersController.getLogout);
     }
  */
 
-// 환자 정보 가져오기
+// 환자 개인 정보 가져오기
 router.post("/patient/info", auth, usersController.getPatient);
 
 // 환자에게 기록 열람 동의 요청

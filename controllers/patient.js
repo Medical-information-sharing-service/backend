@@ -197,13 +197,7 @@ exports.postAgree = async (req, res, next) => {
     const { licenseNumber, answer } = req.body;
 
     if (answer === "Accept") {
-      patient.doctorList.push(licenseNumber);
-      patient.agreeList = patient.agreeList.filter((e) => e !== licenseNumber);
-
-      await patient.save();
-
-      const doctor = await Doctor.findOne({ licenseNumber });
-
+      // 의사에 환자 담기
       const isAlready = doctor.patientList.some((ele) => ele === patientId);
 
       if (!isAlready) {
@@ -211,6 +205,8 @@ exports.postAgree = async (req, res, next) => {
 
         await doctor.save();
       } else {
+        // 이미 등록된 환자일경우
+
         res.json({
           isSuccess: false,
           message: "이미 등록된 환자입니다.",
@@ -220,6 +216,15 @@ exports.postAgree = async (req, res, next) => {
         return;
       }
 
+      // 환자에 의사 넣기
+      patient.doctorList.push(licenseNumber);
+      // agreeList에서 빼기
+      patient.agreeList = patient.agreeList.filter((e) => e !== licenseNumber);
+
+      await patient.save();
+
+      const doctor = await Doctor.findOne({ licenseNumber });
+
       res.json({
         isSuccess: true,
         message: "환자 기록 공유 동의 성공",
@@ -228,6 +233,12 @@ exports.postAgree = async (req, res, next) => {
 
       return;
     } else {
+      // 취소하면
+
+      // agreeList에서 빼기
+      patient.agreeList = patient.agreeList.filter((e) => e !== licenseNumber);
+      await patient.save();
+
       res.json({
         isSuccess: false,
         message: "환자가 기록 공유를 동의하지 않았습니다.",

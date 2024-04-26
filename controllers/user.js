@@ -207,14 +207,17 @@ exports.postAgree = async (req, res, next) => {
 
     const isAlready = doctor.patientList.some((ele) => ele === patientId);
 
+    // 의사의 환자 리스트에 이미 있는 환자인지
     if (isAlready) {
       res.json({
         isSuccess: false,
         message: "이미 등록된 환자입니다.",
         token,
       });
+
+      return;
     } else {
-      // 중복 처리
+      // agreeList에 이미 있는 의사라면 배열의 맨 끝 인덱스로 빼기
       let { agreeList } = patient;
       agreeList = agreeList.filter((e) => e !== licenseNumber);
       agreeList.push(licenseNumber);
