@@ -30,6 +30,9 @@ const historySchema = new Schema({
     type: String,
     required: true,
   },
+  diagnosis: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("History", historySchema);
